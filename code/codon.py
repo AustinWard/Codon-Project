@@ -86,13 +86,11 @@ class Group():
 		self.counted_positions = 0				#number of nucleotide positions looked at
 
 	def __str__(self):
-		pass
-		'''
 		return("Group: " + self.name + "\n" + 
 			"Genes: " + str(self.total_genes) + "\n" +
 			"Total Length: " + str(self.total_length) + "\n"
 			"Counted Positions: " + str(self.counted_positions) + "\n")
-		'''
+
 	def count_mutations(self):
 
 		outlier = None
@@ -110,10 +108,10 @@ class Group():
 				self.total_length+=3
 				current_codons = []
 
-				found_match = True #if one of the in-group amino acides matches the outlier - we need at least one
+				found_match = False #if one of the in-group amino acides matches the outlier - we need at least one
 	
 				if out_codon.aa != '-':
-					
+					found_match = True
 					for seq in in_group:
 						#TO DO: should include test as to whether the lengths of the protein and nucleotide sequences are of the same length
 						current_aa = seq.codons[out_codon.pos].aa
