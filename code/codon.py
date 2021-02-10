@@ -40,6 +40,8 @@ class Species():
 
 	def add_codons(self):
 
+		self.codons = []
+
 		seq_length = len(self.nucleotide)
 
 		#the protein sequences should be exactly a third of length of the codon aligned nucleotide sequence
@@ -56,8 +58,6 @@ class Species():
 				codon = Codon(aa, n1, n2, n3, index, self)
 
 				self.codons.append(codon)
-
-			return(seq_length)
 
 	def __str__(self):
 		return(self.name + "\n" +
@@ -231,7 +231,7 @@ def main(args):
 					species[seq_count].add_codons()
 
 					seq_count+=1
-
+				
 				group.count_mutations()
 
 			count+=1 
