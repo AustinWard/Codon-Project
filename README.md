@@ -13,12 +13,11 @@ Dectecting mutation accumulation in a recent WGD event that results in the pseud
 1. *Potamopyrgus estuarinus* - pre-duplication state
 2. *Potamopyrgus antipodarum* - closely related species that went through a recent genome duplication event.
 
-![panti](/sources/pictures/panti.jpg)
-
 #### **Prior research**
 
 1. [Angie's Thesis](/sources/articles/honorsthesis_akalwies.pdf)
 
+![table1](/sources/pictures/sampleout001.png)
 
 #### **Strategy**
 
@@ -30,7 +29,6 @@ Dectecting mutation accumulation in a recent WGD event that results in the pseud
 6. MSA of dupicate pair and single copy
 7. Analysis
 
-
 ### **Test Case 2:**
 
 Detecting mutation accumulation in a recent (10,000 - 1MYA) transition to asexualality in *Diachasma M.*
@@ -41,11 +39,9 @@ Detecting mutation accumulation in a recent (10,000 - 1MYA) transition to asexua
 2. *Diachasma ferrugineum* - sexual
 3. *Diachasma alloeum* - outgroup
 
-
 #### **Prior research**
 
 1. [ET1](/sources/articles/GenomeEvolutionAsexualwasp.pdf)
-
 
 #### **Strategy**
 
