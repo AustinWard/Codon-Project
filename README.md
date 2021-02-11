@@ -17,7 +17,7 @@ Dectecting mutation accumulation in a recent WGD event that results in the pseud
 
 1. [Angie's Thesis](/sources/articles/honorsthesis_akalwies.pdf)
 
-![table1](/sources/pictures/sampleout_put001.png)
+![table1](/sources/pictures/sample_output001.png)
 
 #### **Strategy**
 
