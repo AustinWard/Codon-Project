@@ -17,7 +17,7 @@ Dectecting mutation accumulation in a recent WGD event that results in the pseud
 
 #### **Prior research**
 
-1. [Angie's Thesis](/sources/articles/honorsthesisakalwies.pdf)
+1. [Angie's Thesis](/sources/articles/honorsthesis_akalwies.pdf)
 
 
 #### **Strategy**
