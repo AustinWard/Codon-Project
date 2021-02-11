@@ -12,11 +12,13 @@ The following test sets were manually annotated and will serve as positive contr
 Dectecting mutation accumulation in a recent WGD event that results in the pseudogenization of duplicated genes.
 
 *Potamopyrgus estuarinus* - pre-duplication state
-*Potamopyrgus antipodarum* - closely related species that went through a recent genome duplication event. 
+*Potamopyrgus antipodarum* - closely related species that went through a recent genome duplication event.
+
+![panti](/sources/pictures/panti.jpg) 
 
 Prior research: 
 
-1. [Angie's Thesis](/files/projects/Codon-Project/articles/honorsthesisakalwies.pdf)
+1. [Angie's Thesis](/sources/articles/honorsthesisakalwies.pdf)
 
 
 ##### Strategy
@@ -35,6 +37,9 @@ Prior research:
 Detecting mutation accumulation in a recent (10,000 - 1MYA) transition to asexualality in *Diachasma M.*
 
 *Diachasma muliebre* - asexual
+*Diachasma ferrugineum* - sexual
 
 
+Prior research:
 
+1. [ET1](/sources/articles/GenomeEvolutionAsexualwasp.pdf)
