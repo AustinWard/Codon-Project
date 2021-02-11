@@ -21,7 +21,7 @@ Dectecting mutation accumulation in a recent WGD event that results in the pseud
 
 #### **Strategy**
 
-1. Run BUSCO on transcriptome of *P. estuarinus* and *P. antipodarum*
+1. Run [BUSCO](https://gitlab.com/ezlab/busco) on transcriptome of *P. estuarinus* and *P. antipodarum*
 2. Determine genes found in a single copy and duplicated copies, respectively
 3. Blast genome to determine genomic information of genes
 4. Blast/BWA raw reads to genomes 
