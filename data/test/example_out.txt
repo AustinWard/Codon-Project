@@ -1,0 +1,62 @@
+Diachasma alloeum
+_____________________________
+_____________________________
+Nonsynonymous: 
+P1: 0
+P2: 0
+P3: 0
+
+Nonsynonymous Count: 0
+_____________________________
+Synonymous: 
+P1: 0
+P2: 0
+P3: 0
+
+Synonymous Count: 0
+_____________________________
+_____________________________
+
+Diachasma ferrugineum
+_____________________________
+_____________________________
+Nonsynonymous: 
+P1: 566
+P2: 421
+P3: 143
+
+Nonsynonymous Count: 1131
+_____________________________
+Synonymous: 
+P1: 136
+P2: 0
+P3: 2918
+
+Synonymous Count: 3044
+_____________________________
+_____________________________
+
+Diachasma muliebre
+_____________________________
+_____________________________
+Nonsynonymous: 
+P1: 822
+P2: 716
+P3: 213
+
+Nonsynonymous Count: 1726
+_____________________________
+Synonymous: 
+P1: 173
+P2: 0
+P3: 3854
+
+Synonymous Count: 3977
+_____________________________
+_____________________________
+
+Group: Diachasma
+Genes: 3127
+Total Length: 3715368
+Counted Positions: 3715356
+

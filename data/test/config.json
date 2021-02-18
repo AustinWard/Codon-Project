@@ -1,0 +1,22 @@
+{
+
+	"group" : "Diachasma",
+	"species" : [
+		{
+			"name": "alloeum",
+			"outgroup" : 1
+		},
+		{
+			"name": "ferrugineum",
+			"outgroup" : 0
+		},
+		{
+			"name" : "muliebre",
+			"outgroup" : 0
+		}
+	],
+
+	"consider": 3,
+	"input_directory": "C:/Users/austi/Desktop/Codon-Project/data/genomes/wasp/Nuc_MSA"
+
+}
