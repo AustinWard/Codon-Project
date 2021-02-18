@@ -43,6 +43,8 @@ Detecting mutation accumulation in a recent (10,000 - 1MYA) transition to asexua
 
 1. [ET1](/sources/articles/GenomeEvolutionAsexualwasp.pdf)
 
+![table2](/sources/pictures/sample_output002.png)
+
 #### **Strategy**
 
 Similar to that of the first test case. The analysis step is what is being worked on now.
