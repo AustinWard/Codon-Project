@@ -2,15 +2,19 @@ import unittest
 
 from Bio import AlignIO
 from codon import Species, Group, Codon
+from CodonTable import CodonTable
 
 class TestCounts(unittest.TestCase):
 
 	def setUp(self):
+
+		codon_table = CodonTable()
+
 		self.species = []
 
-		self.species.append(Species('TAXON_1', True))
-		self.species.append(Species('TAXON_2'))
-		self.species.append(Species('TAXON_3'))
+		self.species.append(Species('TAXON_1', 'taxa', True))
+		self.species.append(Species('TAXON_2', 'taxa'))
+		self.species.append(Species('TAXON_3', 'taxa'))
 
 		self.group = Group('Group', self.species)
 
@@ -31,7 +35,7 @@ class TestCounts(unittest.TestCase):
 			self.species[seq_count].protein = p_align[seq_count]
 			self.species[seq_count].nucleotide = codon_align[seq_count]
 
-			self.species[seq_count].add_codons()
+			self.species[seq_count].add_codons(codon_table)
 
 			seq_count+=1
 
