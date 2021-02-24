@@ -1,8 +1,10 @@
+# Detecting Genomic Signatures
+
 ## Introduction
 
-Create a (semi)automated pipeline that allows for the detection of specific genomic signatures resulting from WGD events and/or transitions from sexual to asexual reproduction. In theory, WGD results in the duplication of the entire gene set, and with that, mutations can accumulate in one copy and avoid selection altogether. This can result in many different outcomes of the duplicated gene (i.e pseudogenization, neo-functionalization and sub-functionalization) that can be detected with comparison to a closely related species in a supposed pre-duplication state. As with sexual vs. asexual, the asexual species has the inability to remove disadvantagous mutations in the absence of sex and recombination. This can result in similar signatures that have been detected in a small set of genes.
+Create a (semi)automated pipeline that allows for the detection of specific genomic signatures resulting from WGD events and/or transitions from sexual to asexual reproduction. In theory, WGD results in the duplication of the entire gene set, and with that, mutations can accumulate in one copy and avoid selection altogether. This can result in many different outcomes of the duplicated genes (i.e pseudogenization, neo-functionalization and sub-functionalization) that can be detected with comparison to a closely related species in a supposed pre-duplication state. As with closely related species with different modes of reproduction, asexual organisms should show specific genomic signatures due to the lack of sex and recombination. This can result in signatures that have been detected in a small set of manually annotated genes.
 
-The following test sets were manually annotated and will serve as positive controls for the automated verison.
+The following test sets were manually annotated and will serve as positive controls for the automated verison that can then be applied to larger datasets. Positions 1/2 and 3 refer to positions within a codon in the figures below. 
 
 ### **Test Case 1:**
 
@@ -23,11 +25,10 @@ Dectecting mutation accumulation in a recent WGD event that results in the pseud
 
 1. Run [BUSCO](https://gitlab.com/ezlab/busco) on transcriptome of *P. estuarinus* and *P. antipodarum*
 2. Determine genes found in a single copy and duplicated copies, respectively
-3. Blast genome to determine genomic information of genes
-4. Blast/BWA raw reads to genomes 
-5. de novo assemble raw reads
-6. MSA of dupicate pair and single copy
-7. Analysis
+3. Blast/BWA raw reads to genomes 
+4. de novo assemble raw reads
+5. MSA of dupicate pair and single copy
+6. Analysis
 
 ### **Test Case 2:**
 
@@ -47,4 +48,4 @@ Detecting mutation accumulation in a recent (10,000 - 1MYA) transition to asexua
 
 #### **Strategy**
 
-Similar to that of the first test case. The analysis step is what is being worked on now.
+Similar to that of the first test case.
