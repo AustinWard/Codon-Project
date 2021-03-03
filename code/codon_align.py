@@ -1,77 +1,205 @@
-'''
-Input:
-	1.  paths to directory containing:
-			1. full_table.csv (generated from BUSCO)
-			2. "single_copy_busco_sequence/" directory containg .faa and .fna files for completed single copy genes (generated from BUSCO)
-Output: 
-	1. creates new folder ("shared_genes/") that contain concatenated files for each of the genes sequences (.faa and .fna) 
-	   for genes that are shared in all genomes.
+from Bio import AlignIO, SeqIO
+from CodonTable import CodonTable
+from Species import Species
+from Taxon import Taxon
 
-The files generated from this script can now be used in pal2nal to make codon aware alignments.
+import argparse
+import sys
+import json
+import os
 
-'''
+def intialize_taxon(config):
 
-from Bio import SeqIO
+	#create species
+	species = []
+	for s in config['species']:
+		species.append(Species(s['name'], config['taxon'], s['busco_data'], s['outgroup']))
 
-from os import sys
+	#create taxon
+	taxon = Taxon(config['taxon'], species)
 
-if __name__ == "__main__":
+	return(taxon) 
 
-	#should rework this function in the future - use dataframe library
-	def read_full_table(path, seq_list):
-		for line in open(path + "full_table.tsv", 'r'):
-			if line[0] != "#" and line != "":
-				information = line.split("\t")
-				if information[1] == "Complete":
-					seq_list.append(information[0])
+def count_mutations(taxon):
 
-	def read_fasta(path, gene, seq_list):
-		for record in SeqIO.parse(path + "busco_sequences/single_copy_busco_sequences/" + gene, "fasta"):
-			seq_list.append(record)
+		outlier = None
+		in_group = []
+
+		for s in taxon.species:
+			if s.outlier:
+				outlier = s
+			else: in_group.append(s)
 		
-	genome1_path = sys.argv[1]
-	genome2_path = sys.argv[2]
-	genome3_path = sys.argv[3]
+		if outlier is not None:
+			#cycling through codons and comparing them to the codons of other species within the taxon
+			for out_codon in outlier.codons:
 
-	output_path = sys.argv[4]
+				taxon.total_length+=3
+				current_codons = []
 
-	genome1_sequences = []
-	genome2_sequences = []
-	genome3_sequences = []
+				found_match = False #if one of the in-group amino acides matches the outlier - we need at least one
+	
+				if out_codon.aa != '-':
+					found_match = True
+					for seq in in_group:
+						#TO DO: should include test as to whether the lengths of the protein and nucleotide sequences are of the same length
+						current_aa = seq.codons[out_codon.pos].aa
+						#print(seq.codons[out_codon.pos])
+						
+						if current_aa == '-':
+							found_match = False
+							break
 
-	read_full_table(genome1_path, genome1_sequences)
-	read_full_table(genome2_path, genome2_sequences)
-	read_full_table(genome3_path, genome3_sequences)
+						current_codons.append(seq.codons[out_codon.pos])
 
-	print(len(genome1_sequences))
-	print(len(genome2_sequences))
-	print(len(genome3_sequences))
+				if found_match:
+
+					analyze_positions = [False, False, False]
+					c1n1 = current_codons[0].n1
+					c1n2 = current_codons[0].n2
+					c1n3 = current_codons[0].n3
+
+					counter = 1
+					while counter < len(current_codons):
+						if c1n1 != current_codons[counter].n1:
+							analyze_positions[0] = True
+						if c1n2 != current_codons[counter].n2:
+							analyze_positions[1] = True
+						if c1n3 != current_codons[counter].n3:
+							analyze_positions[2] = True
+						counter+=1
+		
+					taxon.counted_positions+=3
+
+					for codon in current_codons:
+						#Looking for Syn. mutation - all mutations have to be syn. by definition
+						found_syn = False
+						found_nsyn = False
+
+						if out_codon.aa == codon.aa:
+							if codon.n1 != out_codon.n1 and analyze_positions[0]:
+								found_syn = True
+								codon.species.sp1+=1
+							if codon.n2 != out_codon.n2 and analyze_positions[1]:
+								found_syn = True
+								codon.species.sp2+=1
+							if codon.n3 != out_codon.n3 and analyze_positions[2]:
+								found_syn = True
+								codon.species.sp3+=1
+							if found_syn:
+								codon.species.syn_count+=1
+
+						#Non-Syn mutations in the 3rd position - example 
+						elif((codon.n1 == out_codon.n1) and (codon.n2 == out_codon.n2)) and analyze_positions[2]:
+							found_nsyn = True
+							codon.species.nsp3+=1
+
+						#Look for Non. Syn mutations - not all mutations are non-syn. - checks for these 
+						else:
+
+							#look at first two positions - any mutation in the first two positions will
+							#always result in a non-syn mutation
+							if codon.n1 != out_codon.n1 and analyze_positions[0]:
+								found_nsyn = True
+								codon.species.nsp1+=1
+							if codon.n2 != out_codon.n2 and analyze_positions[1]:
+								codon.species.nsp2+=1
+								found_nsyn = True
+							if codon.n3 != out_codon.n3 and analyze_positions[2]:
+								found_nsyn = True
+								if out_codon.aa == 'M':
+									if analyze_positions[2]:
+										codon.species.nsp3+=1
+								if out_codon.aa == 'I':
+									if codon.n3 == 'G':
+										if analyze_positions[2]:
+											codon.species.nsp3+=1
+									else: 
+										if analyze_positions[2]:
+											codon.species.sp3+=1
+
+								#aa that are encoded by codons that can have anything at the 3rd position - replace next line with regex
+								elif ((out_codon.n2 == 'C') or ((out_codon.n1 in ['C', 'G']) and (out_codon.n2 in ['T', 'G']))):
+									if analyze_positions[2]:
+										codon.species.sp3+=1
+
+								#aa that can have T/C at 3rd position OR A/G at 3rd position
+								else:
+									if (out_codon.n3 in ['T', 'C']):
+										if (codon.n3 in ['T', 'C']):
+											if analyze_positions[2]:
+												codon.species.sp3+=1
+										else:
+											if analyze_positions[2]:
+												codon.species.nsp3+=1
+									#A or G in 3rd position
+									else:
+										if (codon.n3 in ['A', 'G']):
+											if analyze_positions[2]:
+												codon.species.sp3+=1
+										else:
+											if analyze_positions[2]:
+												codon.species.nsp3+=1
+
+						if found_nsyn: codon.species.nsyn_count+=1
+
+def read_seqs(config, taxon, codon_table):
+
+	#looping through genes to be analyzed if directory exists
+	if os.path.isdir(config['input_directory']):
+		count = 0
+		genes = os.listdir(config['input_directory'])
+		taxon.total_genes = len(genes)
+
+		while count < taxon.total_genes:
+			file_path = os.path.join(config['input_directory'], genes[count])
+			with open(file_path) as f:
+				nuc_msa = AlignIO.read(f, 'fasta')
+
+			if len(nuc_msa) < config['consider']:
+				print("The number of sequences in " + genes[count] + " is less than what is expected.")
+				sys.exit()
+
+			seq_count = 0
+			while seq_count < config['consider']:
+				taxon.species[seq_count].nucleotide = nuc_msa[seq_count]
+				taxon.species[seq_count].add_codons(codon_table)
+
+				seq_count+=1
+
+			count_mutations(taxon)
+
+			count+=1
+
+def busco_intersect(taxon):
+	pass
 
 
-	gene_intersection = list(set(genome1_sequences) & set(genome2_sequences) & set(genome3_sequences))
-	print(len(gene_intersection))
+def main(args):
 
+	codon_table = CodonTable() #will allow user to select a specific codon table in the future
 
-	print(gene_intersection[0:9])
+	## read json if it exists
+	if os.path.exists(args.config):
+		with open(args.config) as f:
+			config = json.load(f)
+	else: 
+		print("Config file not found")
+		sys.exit()
 
-	for gene in gene_intersection:
-		nuc_sequeces = []
-		aa_sequences = []
+	taxon = intialize_taxon(config)
+	read_seqs(config, taxon, codon_table)
 
-		read_fasta(genome1_path, gene + ".faa", aa_sequences)
-		read_fasta(genome1_path, gene + ".fna", nuc_sequeces)
+	for s in taxon.species:
+		print(s)
+	print(taxon)
 
-		read_fasta(genome2_path, gene + ".faa", aa_sequences)
-		read_fasta(genome2_path, gene + ".fna", nuc_sequeces)
+if __name__ == '__main__':
 
-		read_fasta(genome3_path, gene + ".faa", aa_sequences)
-		read_fasta(genome3_path, gene + ".fna", nuc_sequeces)
+	parser = argparse.ArgumentParser(description='Counting positional mutations within codons')
 
-		#need to rename header information to include species information
-		with open(output_path + "nucleotides/" + gene + "_triplet.fna", "w") as f:
-			SeqIO.write(nuc_sequeces, f, "fasta")
-
-		with open(output_path + "proteins/" + gene + "_triplet.faa", "w") as f:
-			SeqIO.write(aa_sequences, f, "fasta")
-
-#run output files into pal2nal
+	parser.add_argument("config", help='Configuration file for run. See example config for details.')
+	#parser.add_argument('--p_aligns', nargs='+', help='Protein alignment file in fasta format (can add more formats later).')
+	#parser.add_argument('--c_aligns', nargs='+', required=True, help='Corresponding codon alignment file from pal2nal.')
+	
+	main(parser.parse_args())
