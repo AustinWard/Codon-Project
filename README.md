@@ -36,4 +36,4 @@ The data on the repo (~600 BUSCO genes) was generated differently from the data 
 4. Produce mutiple sequence alignments of the nucleotide data associated with proteins from (3) using PAL2NAL software (a codon aware alignment tool)
 5. Count mutations and group by position of mutation within the codon - ** the mutations will be further classified by Non-Syn vs Synonymous **
 
-     Mutations that are analyzed must be unique mutation to the species under investigation (*D. mulibre* vs. *D. ferrugineum*). All this means is that a mutation must have occured after the speciaction event and not in the branch connecting the two nor coming from the branch shared with the outgroup (*D. alloem*)
+Mutations that are analyzed must be unique mutation to the species under investigation (*D. mulibre* vs. *D. ferrugineum*). All this means is that a mutation must have occured after the speciaction event and not in the branch connecting the two nor coming from the branch shared with the outgroup (*D. alloem*)
